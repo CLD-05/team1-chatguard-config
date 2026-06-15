@@ -20,6 +20,8 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true # Dockerfile USER app(D31)과 정합
+        runAsUser: 999 # ← 추가
+        runAsGroup: 999 # ← 추가
       # graceful shutdown(D11): SIGTERM 후 현재 job 마무리 시간 확보.
       # 모델 추론 시간보다 넉넉히(Week4에 cap 측정 후 재확정).
       terminationGracePeriodSeconds: 60
