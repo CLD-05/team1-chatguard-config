@@ -1,0 +1,14 @@
+# base/configmap.yaml
+# 안 바뀌는 공통 env만 둔다(A-5 env 계약). git에 두기 적합한 안정값.
+# 변동값(REDIS_HOST·DB_URL)과 시크릿(DB_*·JWT_SECRET)은 여기 없다 —
+# 매일 클러스터에 직접 주입되는 Secret `chatguard-secrets`가 공급(envFrom).
+# 큐 키·채널 prefix는 A-3/A-5 확정값과 글자 단위 동일(D24).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: chatguard-config
+data:
+  REDIS_PORT: "6379"
+  MOD_QUEUE_KEY: "mod:queue"
+  ROOM_CHANNEL_PREFIX: "room:"
+  MODEL_VERSION: "unsmile-v1"

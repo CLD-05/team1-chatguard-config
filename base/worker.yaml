@@ -1,0 +1,47 @@
+# base/worker.yaml
+# Moderation Worker (Python, in-process 모델). A-5: 메트릭/프로브 포트 8000.
+# 큐 소비자라 외부에서 호출받지 않음 → Service 불필요(메트릭은 ServiceMonitor가
+# Pod를 직접 스크레이프; 그 ServiceMonitor는 관측성 작업 소관, 여기 미포함).
+# KEDA ScaledObject가 이 Deployment를 스케일 대상으로 삼는다(별도 작업).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moderation-worker
+  labels:
+    app: moderation-worker
+spec:
+  selector:
+    matchLabels:
+      app: moderation-worker
+  template:
+    metadata:
+      labels:
+        app: moderation-worker
+    spec:
+      securityContext:
+        runAsNonRoot: true # Dockerfile USER app(D31)과 정합
+      # graceful shutdown(D11): SIGTERM 후 현재 job 마무리 시간 확보.
+      # 모델 추론 시간보다 넉넉히(Week4에 cap 측정 후 재확정).
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: moderation-worker
+          image: team1-dev-worker
+          ports:
+            - containerPort: 8000 # /metrics (A-5)
+          envFrom:
+            - configMapRef:
+                name: chatguard-config
+            - secretRef:
+                name: chatguard-secrets
+          # worker.py가 8000에서 prometheus_client HTTP를 연다 → 프로브 겸용(A-5).
+          livenessProbe:
+            httpGet: { path: /metrics, port: 8000 }
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet: { path: /metrics, port: 8000 }
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests: { cpu: "250m", memory: "512Mi" }
+            limits: { memory: "1536Mi" } # 모델 in-process 로드 고려(이미지 2GB대)
