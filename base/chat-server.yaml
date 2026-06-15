@@ -18,6 +18,8 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true # Dockerfile USER app(D31)과 정합
+        runAsUser: 999 # ← 추가
+        runAsGroup: 999 # ← 추가
       containers:
         - name: chat-server
           # 이름만 고정 — overlay images:가 ECR URL+SHA로 덮는다.
