@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: team1-dev-front
+          image: team1-dev-frontend
           ports:
             - containerPort: 80
           livenessProbe:
