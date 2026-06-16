@@ -1,0 +1,30 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: chatguard
+
+resources:
+  - ../../base
+  - externalsecret.yaml 
+
+patches:
+  - path: replicas-patch.yaml
+
+# prod배포 후 확인
+images:
+  - name: team1-dev-api-server
+    newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-prod-api-server
+    newTag: PLACEHOLDER   # 배포할 실제 이미지 태그
+  - name: team1-dev-ai-worker
+    newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-prod-ai-worker
+    newTag: PLACEHOLDER
+
+# 운영계 실물 인프라(RDS, Redis) 주소를 주입하는 블록
+configMapGenerator:
+  - name: chatguard-config
+    behavior: merge
+    literals:
+      - SPRING_PROFILES_ACTIVE=prod
+      - DB_URL=jdbc:mysql://team1-prod-db.cne4w2cys26c.ap-northeast-2.rds.amazonaws.com:3306/chatguard
+      - REDIS_HOST=team1-prod-redis.9iaedf.ng.0001.apn2.cache.amazonaws.com
+      - REDIS_PORT=6379
