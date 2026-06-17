@@ -1,0 +1,7 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: chatguard-ingress
+  namespace: chatguard
+  annotations:
+    alb.ingress.kubernetes.io/tags: "Team=team1,Environment=prod,Project=chatguard"

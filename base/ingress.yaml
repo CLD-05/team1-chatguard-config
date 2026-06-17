@@ -4,7 +4,7 @@ metadata:
   name: chatguard-ingress
   namespace: chatguard
   annotations:
-    alb.ingress.kubernetes.io/tags: "Team=team1,Environment=dev,Project=chatguard"
+    alb.ingress.kubernetes.io/tags: "Team=team1,Project=chatguard"
     alb.ingress.kubernetes.io/healthcheck-path: /
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
@@ -20,3 +20,4 @@ spec:
             name: frontend
             port:
               number: 80
+              
