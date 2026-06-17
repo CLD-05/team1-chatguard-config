@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: team1-prod-chatguard        
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/CLD-05/team1-chatguard-config' 
+    targetRevision: HEAD
+    path: overlays/prod              
+  destination:
+    server: team1-prod-cluster
+    namespace: chatguard
+  syncPolicy:
+    syncOptions:
+      - RespectIgnoreDifferences=true
