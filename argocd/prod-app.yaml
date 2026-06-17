@@ -12,11 +12,8 @@ spec:
     targetRevision: HEAD
     path: overlays/prod              
   destination:
-    server: team1-prod-cluster 
-    namespace: default
+    server: team1-prod-cluster
+    namespace: chatguard
   syncPolicy:
-    automated:
-      prune: true     # Git에서 지우면 실제 k8s에서도 자동 삭제
-      selfHeal: true  # 수동 변경 감지 시 Git 상태로 자동 원상복구
     syncOptions:
-      - CreateNamespace=true
+      - RespectIgnoreDifferences=true
