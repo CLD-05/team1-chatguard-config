@@ -14,11 +14,11 @@ patches:
 #   newName = ECR URL. apply 후 첫 파이프라인 실행 전까지 newTag는 placeholder.
 images:
 - name: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-ai-worker
-  newTag: 1f54f58daf8b8e5a3cdce9ddb4736742fe682d55
+  newTag: 6f1a5c083148eed4c416cd2c4c9bb063e561c10f
 - name: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-api-server
-  newTag: 1f54f58daf8b8e5a3cdce9ddb4736742fe682d55
+  newTag: 6f1a5c083148eed4c416cd2c4c9bb063e561c10f
 - name: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-frontend
-  newTag: 1f54f58daf8b8e5a3cdce9ddb4736742fe682d55
+  newTag: 6f1a5c083148eed4c416cd2c4c9bb063e561c10f
 - name: team1-dev-ai-worker
   newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-ai-worker
   newTag: PLACEHOLDER
