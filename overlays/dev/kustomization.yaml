@@ -13,12 +13,6 @@ patches:
 # ★ deploy.yml의 `kustomize edit set image`가 이 블록의 newTag를 git SHA로 자동 갱신.
 #   newName = ECR URL. apply 후 첫 파이프라인 실행 전까지 newTag는 placeholder.
 images:
-- name: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-ai-worker
-  newTag: 6f1a5c083148eed4c416cd2c4c9bb063e561c10f
-- name: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-api-server
-  newTag: 6f1a5c083148eed4c416cd2c4c9bb063e561c10f
-- name: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-frontend
-  newTag: 6f1a5c083148eed4c416cd2c4c9bb063e561c10f
 - name: team1-dev-ai-worker
   newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-ai-worker
   newTag: PLACEHOLDER
