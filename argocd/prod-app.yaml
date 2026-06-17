@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: team1-prod-chatguard        
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/CLD-05/team1-chatguard-config' 
+    targetRevision: HEAD
+    path: overlays/prod              
+  destination:
+    server: team1-prod-cluster 
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true     # Git에서 지우면 실제 k8s에서도 자동 삭제
+      selfHeal: true  # 수동 변경 감지 시 Git 상태로 자동 원상복구
+    syncOptions:
+      - CreateNamespace=true
