@@ -25,4 +25,3 @@ images:
 
 configurations:
   - ../../base/configurations/secret-name-reference.yaml
-  
