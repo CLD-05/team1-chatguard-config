@@ -24,4 +24,4 @@ images:
   newTag: 947704d1322ab1575b0099d8c1616a67bce17341
 
 configurations:
-  - ../../base/configurations/secret-name-reference.yaml
+  - configurations/secret-name-reference.yaml
