@@ -30,3 +30,6 @@ configMapGenerator:
       - DB_URL=jdbc:mysql://team1-prod-db.cne4w2cys26c.ap-northeast-2.rds.amazonaws.com:3306/chatguard
       - REDIS_HOST=team1-prod-redis.9iaedf.ng.0001.apn2.cache.amazonaws.com
       - REDIS_PORT=6379
+
+configurations:
+  - https://root314.github.io/kustomize-nameref-configurations/secret-name-reference.yaml
