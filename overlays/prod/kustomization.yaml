@@ -16,10 +16,10 @@ patches:
 images:
   - name: team1-dev-api-server
     newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-prod-api-server
-    newTag: PLACEHOLDER   # 배포할 실제 이미지 태그
+    newTag: 947704d1322ab1575b0099d8c1616a67bce17341   # 배포할 실제 이미지 태그
   - name: team1-dev-ai-worker
     newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-prod-ai-worker
-    newTag: PLACEHOLDER
+    newTag: 947704d1322ab1575b0099d8c1616a67bce17341
 
 # 운영계 실물 인프라(RDS, Redis) 주소를 주입하는 블록
 configMapGenerator:
@@ -32,5 +32,5 @@ configMapGenerator:
       - REDIS_PORT=6379
 
 configurations:
-  - ../../base/configurations/secret-name-reference.yaml
+  - configurations/secret-name-reference.yaml
   
