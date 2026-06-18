@@ -22,3 +22,6 @@ images:
 - name: team1-dev-frontend
   newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-frontend
   newTag: 947704d1322ab1575b0099d8c1616a67bce17341
+
+configurations:
+  - ../../base/configurations/secret-name-reference.yaml
