@@ -32,4 +32,5 @@ configMapGenerator:
       - REDIS_PORT=6379
 
 configurations:
-  - https://root314.github.io/kustomize-nameref-configurations/secret-name-reference.yaml
+  - ../../base/configurations/secret-name-reference.yaml
+  

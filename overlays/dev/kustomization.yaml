@@ -24,5 +24,5 @@ images:
   newTag: 947704d1322ab1575b0099d8c1616a67bce17341
 
 configurations:
-  - https://root314.github.io/kustomize-nameref-configurations/secret-name-reference.yaml
+  - ../../base/configurations/secret-name-reference.yaml
   
