@@ -53,6 +53,11 @@ metadata:
   name: chat-server
   labels:
     app: chat-server
+  annotations:
+    # LBC는 Service에 붙인 헬스체크 어노테이션을 그 Service의 타깃그룹에 적용 → chat-server 전용 헬스체크 분리(D47).
+    alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
+    # D18: LOR=새 연결을 가장 한가한 pod로. D15: 짧은 dereg delay=능동 1001 close 기반 graceful drain에 맞춤.
+    alb.ingress.kubernetes.io/target-group-attributes: load_balancing.algorithm.type=least_outstanding_requests,deregistration_delay.timeout_seconds=30
 spec:
   selector:
     app: chat-server
