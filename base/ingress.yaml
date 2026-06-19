@@ -5,14 +5,33 @@ metadata:
   namespace: chatguard
   annotations:
     alb.ingress.kubernetes.io/tags: "Team=team1,Project=chatguard"
+    # frontend(/) 타깃그룹 기본 헬스체크. chat-server 타깃그룹은 Service 어노테이션으로 분리(D47).
     alb.ingress.kubernetes.io/healthcheck-path: /
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
+    # WS 장수 연결 keep-alive — 기존 nginx proxy_read_timeout 3600s 대체(D47).
+    alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=3600
 spec:
   ingressClassName: alb
   rules:
+  # D47: ALB가 /api·/ws를 chat-server로 직접 분기(nginx 프록시 아님) → D18(LOR)·D15(드레인) 실작동.
+  # /api·/ws를 / 보다 먼저 나열(ALB는 경로 구체성으로 우선순위를 정함).
   - http:
       paths:
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: chat-server
+            port:
+              number: 8080
+      - path: /ws
+        pathType: Prefix
+        backend:
+          service:
+            name: chat-server
+            port:
+              number: 8080
       - path: /
         pathType: Prefix
         backend:
