@@ -7,20 +7,30 @@ namePrefix: team1-prod-
 resources:
   - ../../base
   - externalsecret.yaml 
+  - clustersecretstore.yaml
 
 patches:
-  - path: replicas-patch.yaml
-    target:
+  - patch: |-
+      apiVersion: apps/v1
       kind: Deployment
-      name: moderation-worker
-  - path: replicas-patch.yaml
-    target:
+      metadata:
+        name: moderation-worker
+      spec:
+        replicas: 2
+  - patch: |-
+      apiVersion: apps/v1
       kind: Deployment
-      name: frontend
-  - path: hpa-patch.yaml
-    target:
+      metadata:
+        name: frontend
+      spec:
+        replicas: 2
+  - patch: |-
+      apiVersion: autoscaling/v2
       kind: HorizontalPodAutoscaler
-      name: chat-server-hpa
+      metadata:
+        name: chat-server-hpa
+      spec:
+        minReplicas: 3
 
 # prod배포 후 확인
 images:

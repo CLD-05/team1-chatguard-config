@@ -11,5 +11,5 @@ data:
   REDIS_PORT: "6379"
   MOD_QUEUE_KEY: "mod:queue"
   ROOM_CHANNEL_PREFIX: "room:"
-  MODEL_VERSION: "unsmile-v1"
+  MODEL_VERSION: "unsmile-weighted-v1"
   WS_CONNECTION_CAP: "200"  # D18: 파드당 WS 연결 상한 — 부하테스트 후 수치 재확정
