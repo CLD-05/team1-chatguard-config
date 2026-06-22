@@ -9,18 +9,27 @@ resources:
   - externalsecret.yaml 
 
 patches:
-  - path: replicas-patch.yaml
-    target:
+  - patch: |-
+      apiVersion: apps/v1
       kind: Deployment
-      name: chat-server
-  - path: replicas-patch.yaml
-    target:
+      metadata:
+        name: chat-server
+      spec:
+        replicas: 3
+  - patch: |-
+      apiVersion: apps/v1
       kind: Deployment
-      name: moderation-worker    
-  - path: replicas-patch.yaml
-    target:
+      metadata:
+        name: moderation-worker
+      spec:
+        replicas: 2
+  - patch: |-
+      apiVersion: apps/v1
       kind: Deployment
-      name: frontend
+      metadata:
+        name: frontend
+      spec:
+        replicas: 2
 
 # prod배포 후 확인
 images:

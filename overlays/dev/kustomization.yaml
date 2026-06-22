@@ -9,14 +9,20 @@ resources:
 - externalsecret.yaml
 
 patches:
-  - path: replicas-patch.yaml
-    target:
+  - patch: |-
+      apiVersion: apps/v1
       kind: Deployment
-      name: chat-server
-  - path: replicas-patch.yaml
-    target:
+      metadata:
+        name: chat-server
+      spec:
+        replicas: 1
+  - patch: |-
+      apiVersion: apps/v1
       kind: Deployment
-      name: frontend
+      metadata:
+        name: frontend
+      spec:
+        replicas: 1
   - path: patches/ingress-tags.yaml
 
 images:
