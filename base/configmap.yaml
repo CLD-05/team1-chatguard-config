@@ -11,4 +11,4 @@ data:
   REDIS_PORT: "6379"
   MOD_QUEUE_KEY: "mod:queue"
   ROOM_CHANNEL_PREFIX: "room:"
-  MODEL_VERSION: "unsmile-v1"
+  MODEL_VERSION: "unsmile-weighted-v1"

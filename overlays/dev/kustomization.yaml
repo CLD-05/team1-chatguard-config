@@ -10,32 +10,32 @@ resources:
 - clustersecretstore.yaml
 
 patches:
-  - patch: |-
-      apiVersion: apps/v1
-      kind: Deployment
-      metadata:
-        name: chat-server
-      spec:
-        replicas: 1
-  - patch: |-
-      apiVersion: apps/v1
-      kind: Deployment
-      metadata:
-        name: frontend
-      spec:
-        replicas: 1
-  - path: patches/ingress-tags.yaml
+- patch: |-
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: chat-server
+    spec:
+      replicas: 1
+- patch: |-
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: frontend
+    spec:
+      replicas: 1
+- path: patches/ingress-tags.yaml
 
 images:
 - name: team1-dev-ai-worker
   newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-ai-worker
-  newTag: 918bb3a1fddc174712e197c8c0563a03bdb038a8
+  newTag: 7263b9c8006ad53937289c6300f396272a6cda90
 - name: team1-dev-api-server
   newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-api-server
-  newTag: 918bb3a1fddc174712e197c8c0563a03bdb038a8
+  newTag: 7263b9c8006ad53937289c6300f396272a6cda90
 - name: team1-dev-frontend
   newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-frontend
-  newTag: 918bb3a1fddc174712e197c8c0563a03bdb038a8
+  newTag: 7263b9c8006ad53937289c6300f396272a6cda90
 
 configurations:
 - configurations/secret-name-reference.yaml
