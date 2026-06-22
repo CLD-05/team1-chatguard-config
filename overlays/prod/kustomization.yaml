@@ -10,13 +10,23 @@ resources:
 
 patches:
   - path: replicas-patch.yaml
-  - path: patches/ingress-tags.yaml
+    target:
+      kind: Deployment
+      name: chat-server
+  - path: replicas-patch.yaml
+    target:
+      kind: Deployment
+      name: moderation-worker    
+  - path: replicas-patch.yaml
+    target:
+      kind: Deployment
+      name: frontend
 
 # prod배포 후 확인
 images:
   - name: team1-dev-api-server
     newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-prod-api-server
-    newTag: 947704d1322ab1575b0099d8c1616a67bce17341   # 배포할 실제 이미지 태그
+    newTag: 947704d1322ab1575b0099d8c1616a67bce17341   
   - name: team1-dev-ai-worker
     newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-prod-ai-worker
     newTag: 947704d1322ab1575b0099d8c1616a67bce17341

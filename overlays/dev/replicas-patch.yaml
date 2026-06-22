@@ -1,12 +1,13 @@
-- target:
-    kind: Deployment
-    name: chat-server
-  patch: |-
-    spec:
-      replicas: 1
-- target:
-    kind: Deployment
-    name: frontend
-  patch: |-
-    spec:
-      replicas: 1
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-server
+spec:
+  replicas: 1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
