@@ -10,8 +10,15 @@ resources:
 - externalsecret.yaml
 
 patches:
-- path: replicas-patch.yaml
-- path: patches/ingress-tags.yaml
+  - path: replicas-patch.yaml
+    target:
+      kind: Deployment
+      name: chat-server
+  - path: replicas-patch.yaml
+    target:
+      kind: Deployment
+      name: frontend
+  - path: patches/ingress-tags.yaml
 
 images:
 - name: team1-dev-ai-worker
@@ -24,5 +31,5 @@ images:
   newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-frontend
   newTag: 918bb3a1fddc174712e197c8c0563a03bdb038a8
 
-#configurations:
-#- configurations/secret-name-reference.yaml
+configurations:
+- configurations/secret-name-reference.yaml

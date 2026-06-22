@@ -10,7 +10,17 @@ resources:
 
 patches:
   - path: replicas-patch.yaml
-  - path: patches/ingress-tags.yaml
+    target:
+      kind: Deployment
+      name: chat-server
+  - path: replicas-patch.yaml
+    target:
+      kind: Deployment
+      name: moderation-worker    
+  - path: replicas-patch.yaml
+    target:
+      kind: Deployment
+      name: frontend
 
 # prod배포 후 확인
 images:
