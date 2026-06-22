@@ -6,12 +6,6 @@
       replicas: 1
 - target:
     kind: Deployment
-    name: moderation-worker
-  patch: |-
-    spec:
-      replicas: 1
-- target:
-    kind: Deployment
     name: frontend
   patch: |-
     spec:
