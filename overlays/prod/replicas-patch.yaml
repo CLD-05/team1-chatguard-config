@@ -1,16 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: chat-server
-spec:
-  replicas: 3 
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
   name: moderation-worker
 spec:
-  replicas: 2 
+  replicas: 2
 ---
 apiVersion: apps/v1
 kind: Deployment

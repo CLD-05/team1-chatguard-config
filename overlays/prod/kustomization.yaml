@@ -12,15 +12,15 @@ patches:
   - path: replicas-patch.yaml
     target:
       kind: Deployment
-      name: chat-server
-  - path: replicas-patch.yaml
-    target:
-      kind: Deployment
-      name: moderation-worker    
+      name: moderation-worker
   - path: replicas-patch.yaml
     target:
       kind: Deployment
       name: frontend
+  - path: hpa-patch.yaml
+    target:
+      kind: HorizontalPodAutoscaler
+      name: chat-server-hpa
 
 # prod배포 후 확인
 images:

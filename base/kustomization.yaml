@@ -8,6 +8,8 @@ resources:
   - worker.yaml
   - frontend.yaml
   - ingress.yaml
+  - pdb.yaml
+  - hpa.yaml
 
 # 공통 라벨 — 모든 리소스에 부착(운영 식별).
 labels:

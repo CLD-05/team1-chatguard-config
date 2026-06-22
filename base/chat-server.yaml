@@ -20,6 +20,8 @@ spec:
         runAsNonRoot: true # Dockerfile USER app(D31)과 정합
         runAsUser: 999 # ← 추가
         runAsGroup: 999 # ← 추가
+      # D15: preStop(10s) + Spring graceful(30s) + 여유 = 60s
+      terminationGracePeriodSeconds: 60
       containers:
         - name: chat-server
           # 이름만 고정 — overlay images:가 ECR URL+SHA로 덮는다.
@@ -27,6 +29,11 @@ spec:
           image: team1-dev-api-server
           ports:
             - containerPort: 8080
+          # D15: ALB가 타깃그룹에서 이 파드를 제거할 시간 확보
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sleep", "10"]
           # 비밀 아닌 값 전부 + 시크릿 전부를 envFrom으로 일괄 주입.
           envFrom:
             - configMapRef:
