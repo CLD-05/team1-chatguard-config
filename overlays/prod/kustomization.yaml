@@ -7,7 +7,7 @@ namePrefix: team1-prod-
 resources:
   - ../../base
   - externalsecret.yaml 
-  - lustersecretstore.yaml
+  - clustersecretstore.yaml
 
 patches:
   - patch: |-
