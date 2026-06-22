@@ -1,4 +1,3 @@
-# dev: 단일 레플리카(비용·검증 단순). prod overlay에서 HA로 올림(D9 정신).
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -11,7 +10,7 @@ kind: Deployment
 metadata:
   name: moderation-worker
 spec:
-  replicas: 1 # KEDA minReplicaCount dev=1(D13). KEDA 미설치 동안의 baseline.
+  replicas: 1 
 ---
 apiVersion: apps/v1
 kind: Deployment

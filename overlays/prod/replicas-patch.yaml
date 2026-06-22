@@ -3,18 +3,18 @@ kind: Deployment
 metadata:
   name: chat-server
 spec:
-  replicas: 3 # 노드 3대에 가용성을 확보하기 위해 3개로 스케일 아웃
+  replicas: 3 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: moderation-worker
 spec:
-  replicas: 2 # 대량의 패킷 처리를 위해 워커 스케일 업
+  replicas: 2 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend
 spec:
-  replicas: 2 # 프론트엔드 이중화 공정 적용
+  replicas: 2 
