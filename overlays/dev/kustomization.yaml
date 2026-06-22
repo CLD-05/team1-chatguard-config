@@ -7,6 +7,7 @@ namePrefix: team1-dev-
 
 resources:
 - ../../base
+- externalsecret.yaml
 
 patches:
 - path: replicas-patch.yaml
@@ -15,13 +16,13 @@ patches:
 images:
 - name: team1-dev-ai-worker
   newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-ai-worker
-  newTag: 947704d1322ab1575b0099d8c1616a67bce17341
+  newTag: 918bb3a1fddc174712e197c8c0563a03bdb038a8
 - name: team1-dev-api-server
   newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-api-server
-  newTag: 947704d1322ab1575b0099d8c1616a67bce17341
+  newTag: 918bb3a1fddc174712e197c8c0563a03bdb038a8
 - name: team1-dev-frontend
   newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-frontend
-  newTag: 947704d1322ab1575b0099d8c1616a67bce17341
+  newTag: 918bb3a1fddc174712e197c8c0563a03bdb038a8
 
-configurations:
-  - configurations/secret-name-reference.yaml
+#configurations:
+#- configurations/secret-name-reference.yaml
