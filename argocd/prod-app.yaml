@@ -17,3 +17,9 @@ spec:
   syncPolicy:
     syncOptions:
       - RespectIgnoreDifferences=true
+  ignoreDifferences:
+      - group: apps
+        kind: Deployment
+        name: team1-prod-moderation-worker
+        jsonPointers:
+        - /spec/replicas
