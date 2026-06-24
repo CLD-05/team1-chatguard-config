@@ -1,0 +1,14 @@
+# base/configurations/scaledobject-name-reference.yaml
+# kustomize에게 "ScaledObject.spec.scaleTargetRef.name 은 Deployment 이름 참조다"를
+# 가르친다. 이게 없으면 namePrefix(team1-dev-)가 이 필드를 리라이트하지 않아
+# KEDA가 team1-dev-moderation-worker 를 못 찾고 스케일이 조용히 죽는다.
+# (HPA는 kustomize 빌트인 지원이지만 ScaledObject(CRD)는 수동 등록 필요.)
+nameReference:
+- kind: Deployment
+  group: apps
+  version: v1
+  fieldSpecs:
+  - path: spec/scaleTargetRef/name
+    kind: ScaledObject
+    group: keda.sh
+    version: v1alpha1

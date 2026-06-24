@@ -11,9 +11,16 @@ resources:
   - pdb.yaml
   - hpa.yaml
   - podmonitor.yaml
+  - worker-podmonitor.yaml
+  - scaledobject.yaml
 
 # 공통 라벨 — 모든 리소스에 부착(운영 식별).
 labels:
   - pairs:
       app.kubernetes.io/part-of: chatguard
     includeSelectors: false
+
+# ScaledObject.spec.scaleTargetRef.name 을 Deployment 이름 참조로 등록 —
+# namePrefix(team1-dev-)가 이 필드까지 리라이트하게 함(없으면 KEDA가 대상 못 찾음).
+configurations:
+  - configurations/scaledobject-name-reference.yaml

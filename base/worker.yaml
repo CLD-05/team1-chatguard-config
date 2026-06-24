@@ -29,7 +29,8 @@ spec:
         - name: moderation-worker
           image: team1-dev-ai-worker
           ports:
-            - containerPort: 8000 # /metrics (A-5)
+            - name: metrics
+              containerPort: 8000 # /metrics (A-5)
           envFrom:
             - configMapRef:
                 name: chatguard-config

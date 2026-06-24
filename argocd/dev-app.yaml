@@ -20,3 +20,10 @@ spec:
       selfHeal: true  # 수동 변경 감지 시 Git 상태로 자동 원상복구
     syncOptions:
       - RespectIgnoreDifferences=true
+  # chat-server는 HPA가 replicas를 관리 → selfHeal이 되돌리지 않도록 무시(⑤).
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      name: team1-dev-chat-server
+      jsonPointers:
+        - /spec/replicas

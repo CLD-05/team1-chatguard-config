@@ -1,0 +1,19 @@
+# base/worker-podmonitor.yaml
+# worker 파드의 /metrics(8000, A-5)를 Prometheus가 스크레이프하도록 등록.
+# 이게 있어야 moderation_e2e_seconds(검열 반영 지연 SLI)·queue_wait 등이 수집돼
+# 헤드라인 대시보드의 "검열 지연" 축이 살아난다(B-2/B-3①).
+# release 라벨은 kube-prometheus-stack 차트와 일치해야 스크레이프됨(B-5, 흔한 함정).
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: moderation-worker-monitor
+  labels:
+    release: kube-prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: moderation-worker
+  podMetricsEndpoints:
+    - port: metrics
+      path: /metrics
+      interval: 30s
