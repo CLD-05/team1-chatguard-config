@@ -15,4 +15,3 @@ data:
   AWS_S3_BUCKET: "team1-dev-chatguard-migration"
   AWS_S3_KEY: "banned_words.txt"
   AWS_REGION: "ap-northeast-2"
-  WS_CONNECTION_CAP: "200"
