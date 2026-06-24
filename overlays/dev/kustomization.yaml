@@ -14,13 +14,6 @@ patches:
     apiVersion: apps/v1
     kind: Deployment
     metadata:
-      name: chat-server
-    spec:
-      replicas: 1
-- patch: |-
-    apiVersion: apps/v1
-    kind: Deployment
-    metadata:
       name: frontend
     spec:
       replicas: 1

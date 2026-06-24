@@ -1,0 +1,36 @@
+# base/scaledobject.yaml
+# worker(moderation-worker)를 검열 큐(mod:queue) 깊이로 스케일.
+# KEDA가 내부적으로 HPA를 생성·관리한다(우리는 ScaledObject만 선언).
+# 거동: 확장 빠르게(D12 stab 0) / 축소 느리게(D12 stab 180s) — 모델 콜드스타트
+# 반복·검열 반영 지연 SLI 안정. 바닥 1(D13: scale-to-zero 안 함, 0→1 콜드스타트가
+# 첫 메시지 SLI(5s)를 깸).
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: moderation-worker
+spec:
+  scaleTargetRef:
+    name: moderation-worker        # ← nameReference가 team1-dev-... 로 리라이트
+  minReplicaCount: 1               # D13
+  maxReplicaCount: 10              # 데모용 — 부하테스트 후 재확정
+  cooldownPeriod: 180              # 마지막 트리거 후 축소까지 대기
+  triggers:
+    - type: redis
+      metadata:
+        hostFromEnv: REDIS_HOST    # worker 파드 env에서 읽음(rebuild-proof)
+        portFromEnv: REDIS_PORT
+        listName: mod:queue        # Redis 큐 키 — prefix 금지(앱과 글자 일치)
+        listLength: "5"            # 파드당 목표 큐 길이. 초과 시 확장
+        enableTLS: "false"         # ElastiCache dev: AUTH·TLS 없음([정찰])
+      # databaseIndex 생략 = 0
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleUp:
+          stabilizationWindowSeconds: 0     # D12 확장 빠름
+        scaleDown:
+          stabilizationWindowSeconds: 180   # D12 축소 느림
+          policies:
+            - type: Pods
+              value: 1
+              periodSeconds: 60
