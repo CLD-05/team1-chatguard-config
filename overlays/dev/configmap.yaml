@@ -12,3 +12,6 @@ data:
   CONFIG_CHANNEL_PREFIX: "config:"
   REDIS_PORT: "6379"
   MODEL_VERSION: "v1.0.0"
+  AWS_S3_BUCKET: "team1-dev-chatguard-migration"
+  AWS_S3_KEY: "banned_words.txt"
+  AWS_REGION: "ap-northeast-2"
