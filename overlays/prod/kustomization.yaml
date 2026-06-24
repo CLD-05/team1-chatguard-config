@@ -31,6 +31,7 @@ patches:
         name: chat-server-hpa
       spec:
         minReplicas: 3
+  - path: patches/ingress-tags.yaml
 
 # prod배포 후 확인
 images:

@@ -28,7 +28,8 @@ spec:
           # deploy.yml의 kustomize edit set image 대상과 글자 단위 일치 인터페이스.
           image: team1-dev-api-server
           ports:
-            - containerPort: 8080
+            - name: http
+              containerPort: 8080
           # D15: ALB가 타깃그룹에서 이 파드를 제거할 시간 확보
           lifecycle:
             preStop:
