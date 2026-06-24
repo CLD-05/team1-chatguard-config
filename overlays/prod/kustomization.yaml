@@ -31,6 +31,7 @@ patches:
         name: frontend
       spec:
         replicas: 2
+  - path: patches/ingress-tags.yaml
 
 # prod배포 후 확인
 images:
