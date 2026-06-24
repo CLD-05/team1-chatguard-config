@@ -14,13 +14,6 @@ patches:
       apiVersion: apps/v1
       kind: Deployment
       metadata:
-        name: chat-server
-      spec:
-        replicas: 3
-  - patch: |-
-      apiVersion: apps/v1
-      kind: Deployment
-      metadata:
         name: moderation-worker
       spec:
         replicas: 2
@@ -31,6 +24,13 @@ patches:
         name: frontend
       spec:
         replicas: 2
+  - patch: |-
+      apiVersion: autoscaling/v2
+      kind: HorizontalPodAutoscaler
+      metadata:
+        name: chat-server-hpa
+      spec:
+        minReplicas: 3
   - path: patches/ingress-tags.yaml
 
 # prod배포 후 확인

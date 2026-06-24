@@ -12,7 +12,7 @@ data:
   MOD_QUEUE_KEY: "mod:queue"
   ROOM_CHANNEL_PREFIX: "room:"
   MODEL_VERSION: "unsmile-weighted-v1"
+  WS_CONNECTION_CAP: "200"  # D18: 파드당 WS 연결 상한 — 부하테스트 후 수치 재확정
   AWS_S3_BUCKET: "team1-dev-chatguard-migration"
   AWS_S3_KEY: "banned_words.txt"
   AWS_REGION: "ap-northeast-2"
-  
