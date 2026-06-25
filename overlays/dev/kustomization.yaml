@@ -22,13 +22,13 @@ patches:
 images:
 - name: team1-dev-ai-worker
   newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-ai-worker
-  newTag: 91066f4c869e797a557d831869a492b213c35891
+  newTag: ab7a2cec13325b8e5c09e976cf068404c86683fd
 - name: team1-dev-api-server
   newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-api-server
-  newTag: 91066f4c869e797a557d831869a492b213c35891
+  newTag: ab7a2cec13325b8e5c09e976cf068404c86683fd
 - name: team1-dev-frontend
   newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-frontend
-  newTag: 91066f4c869e797a557d831869a492b213c35891
+  newTag: ab7a2cec13325b8e5c09e976cf068404c86683fd
 
 configurations:
 - configurations/secret-name-reference.yaml
