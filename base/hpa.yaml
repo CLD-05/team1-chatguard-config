@@ -13,7 +13,9 @@ spec:
     - type: Pods
       pods:
         metric:
-          name: ws_active_connections
+          # prometheus-adapter가 이 메트릭을 `_per_pod` 접미사로 rename해 서빙 →
+          # HPA도 그 이름으로 찾아야 매칭됨(접미사 없으면 <unknown>). 진단으로 확인.
+          name: ws_active_connections_per_pod
         target:
           type: AverageValue
           averageValue: "100"
