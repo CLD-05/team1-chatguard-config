@@ -16,7 +16,7 @@ spec:
       labels:
         app: chat-server
     spec:
-      serviceAccountName: team1-dev-api-server-sa
+      serviceAccountName: api-server-sa
       securityContext:
         runAsNonRoot: true # Dockerfile USER app(D31)과 정합
         runAsUser: 999 # ← 추가
