@@ -8,7 +8,7 @@ spec:
     kind: Deployment
     name: chat-server
   minReplicas: 1
-  maxReplicas: 10
+  maxReplicas: 5   # 부하테스트 캡: RDS db.t4g.micro max_connections≈85 회피 (5×Hikari10=50). 운영 재확정 시 상향.
   metrics:
     - type: Pods
       pods:
