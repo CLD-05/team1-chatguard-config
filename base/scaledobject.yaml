@@ -12,7 +12,7 @@ spec:
   scaleTargetRef:
     name: moderation-worker        # ← nameReference가 team1-dev-... 로 리라이트
   minReplicaCount: 1               # D13
-  maxReplicaCount: 10              # 데모용 — 부하테스트 후 재확정
+  maxReplicaCount: 5               # 부하테스트 캡: DB 85 커넥션 천장 회피 (5×풀5=25; chat50+worker25=75<85). 운영 재확정 시 상향
   # cooldownPeriod 미설정: scale-to-zero(0) 진입 시에만 쓰이는 값인데
   # minReplicaCount=1이라 0으로 내려가지 않음 → 무효. 실효 축소 대기는
   # 아래 behavior.scaleDown.stabilizationWindowSeconds(180s)가 단독 제어(D12).
