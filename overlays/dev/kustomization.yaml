@@ -8,6 +8,7 @@ resources:
 - ../../base
 - externalsecret.yaml
 - clustersecretstore.yaml
+- prometheus-rules-dev.yaml
 
 patches:
 - patch: |-
