@@ -1,0 +1,23 @@
+# overlays/dev/prometheus-rules-dev.yaml — DESIGN D55, dev 한정 경보.
+# redis_exporter(prometheus-redis-exporter)가 dev platform-addons에만 설치돼
+# redis_key_size{key="mod:queue"}가 dev에서만 노출되므로 base가 아닌 dev overlay에 둔다.
+# (prod에 redis_exporter 추가 시 base로 승격 검토.)
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: chatguard-moderation-rules-dev
+  namespace: chatguard
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: chatguard-moderation-dev
+      rules:
+        - alert: ModerationQueueBacklog
+          expr: redis_key_size{key="mod:queue"} > 50
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "검열 큐 적체 > 50 (스케일아웃해도 못 따라가는 신호)"
+            description: "mod:queue 깊이 50 초과 지속. 임계 N은 부하테스트 후 보정 예정(DESIGN D5·D10)."

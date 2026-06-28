@@ -14,6 +14,7 @@ resources:
   - podmonitor.yaml
   - worker-podmonitor.yaml
   - scaledobject.yaml
+  - prometheus-rules.yaml
 
 # 공통 라벨 — 모든 리소스에 부착(운영 식별).
 labels:
@@ -25,3 +26,16 @@ labels:
 # namePrefix(team1-dev-)가 이 필드까지 리라이트하게 함(없으면 KEDA가 대상 못 찾음).
 configurations:
   - configurations/scaledobject-name-reference.yaml
+
+# Grafana 대시보드(고아 JSON)를 ConfigMap으로 배선 — DESIGN D55.
+# 사이드카 디스커버리 라벨 grafana_dashboard:"1", disableNameSuffixHash로 이름 고정.
+# ★ 실제 표시는 infra grafana sidecar.dashboards.searchNamespace:"ALL"(별도 infra PR) 머지 후 동작.
+configMapGenerator:
+  - name: grafana-dashboard-chatguard-scaleout
+    namespace: chatguard
+    files:
+      - grafana/dashboards/chatguard-scaleout-dashboard.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"

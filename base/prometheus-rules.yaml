@@ -1,0 +1,35 @@
+# base/prometheus-rules.yaml — DESIGN D55 도메인 경보(검열 파이프라인). dev/prod 공통.
+#  - ModerationLatencyHigh : 검열 반영 지연 p95 > 5s SLO 위반(B-1/B-4). 차단 트래픽 0일 때 NaN 가드 포함.
+#  - ModerationWorkerDown  : 검열 워커 가용 레플리카 0(악성 메시지 무검열 통과 위험).
+# release 라벨이 kube-prometheus-stack과 일치해야 Prometheus ruleSelector가 픽업(B-5, podmonitor와 동일).
+# 큐 백로그(ModerationQueueBacklog)는 redis_exporter가 dev platform-addons에만 있어 overlays/dev로 분리.
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: chatguard-moderation-rules
+  namespace: chatguard
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: chatguard-moderation
+      rules:
+        - alert: ModerationLatencyHigh
+          expr: |
+            histogram_quantile(0.95, sum(rate(moderation_e2e_seconds_bucket[5m])) by (le)) > 5
+            and sum(rate(moderation_e2e_seconds_count[5m])) > 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "검열 반영 지연 p95 > 5s (오토스케일이 큐를 못 따라감)"
+            description: "검열 e2e p95가 5초 SLO를 초과. KEDA 스케일아웃/천장(DB 커넥션 등) 확인."
+        - alert: ModerationWorkerDown
+          expr: |
+            kube_deployment_status_replicas_available{namespace="chatguard", deployment=~"team1-.*-moderation-worker"} == 0
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "검열 워커 0개 — 악성 메시지 무검열 통과 위험"
+            description: "moderation-worker 가용 레플리카 0. KEDA min(dev 1 / prod 2) 위반. 즉시 확인."
