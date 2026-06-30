@@ -32,6 +32,18 @@ patches:
       spec:
         minReplicas: 3
   - path: patches/ingress-tags.yaml
+  # fix#2: api-server-sa role-arn prod 정정.
+  # namePrefix(team1-prod-)는 SA *이름*만 리라이트하고 annotation *값*은 안 건드림 →
+  # base의 dev role(team1-dev-chat-server-s3-role)이 prod로 누수. base 이름 api-server-sa로
+  # 매칭(패치는 namePrefix 이전 이름)해 prod role ARN(C1, infra iam.tf)으로 교체.
+  - patch: |-
+      apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: api-server-sa
+        namespace: chatguard   # base SA가 namespace 명시 → 패치 target ID도 동일 ns여야 매칭
+        annotations:
+          eks.amazonaws.com/role-arn: arn:aws:iam::495599735720:role/team1-prod-chat-server-s3-role
 
 # prod배포 후 확인
 images:
@@ -51,6 +63,9 @@ configMapGenerator:
       - DB_URL=jdbc:mysql://team1-prod-db.cne4w2cys26c.ap-northeast-2.rds.amazonaws.com:3306/chatguard
       - REDIS_HOST=team1-prod-redis.9iaedf.ng.0001.apn2.cache.amazonaws.com
       - REDIS_PORT=6379
+      # fix#1: base는 dev 버킷(team1-dev-chatguard-migration) 하드코딩 → configmap 값은
+      # namePrefix 미적용이라 prod에 누수. prod 금칙어 버킷(C2, infra main.tf)으로 override.
+      - AWS_S3_BUCKET=team1-prod-banned-words
 
 configurations:
   - configurations/secret-name-reference.yaml
