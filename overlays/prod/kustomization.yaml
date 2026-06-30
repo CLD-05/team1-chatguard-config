@@ -6,7 +6,7 @@ namePrefix: team1-prod-
 
 resources:
   - ../../base
-  - externalsecret.yaml 
+  - externalsecret.yaml
   - clustersecretstore.yaml
 
 patches:
@@ -49,13 +49,13 @@ patches:
 images:
   - name: team1-dev-api-server
     newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-prod-api-server
-    newTag: 947704d1322ab1575b0099d8c1616a67bce17341   
+    newTag: 947704d1322ab1575b0099d8c1616a67bce17341
   - name: team1-dev-ai-worker
     newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-prod-ai-worker
     newTag: 947704d1322ab1575b0099d8c1616a67bce17341
   - name: team1-dev-frontend
     newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-prod-frontend
-    newTag: 947704d1322ab1575b0099d8c1616a67bce17341
+    newTag: 40deb60dba3f51cd55ce9c32da0214824c6b09f2
 
 # 운영계 실물 인프라(RDS, Redis) 주소를 주입하는 블록
 configMapGenerator:
@@ -72,4 +72,3 @@ configMapGenerator:
 
 configurations:
   - configurations/secret-name-reference.yaml
-  
