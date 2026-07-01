@@ -5,31 +5,31 @@ namespace: chatguard
 namePrefix: team1-dev-
 
 resources:
-- ../../base
-- externalsecret.yaml
-- clustersecretstore.yaml
-- prometheus-rules-dev.yaml
+  - ../../base
+  - externalsecret.yaml
+  - clustersecretstore.yaml
+  - prometheus-rules-dev.yaml
 
 patches:
-- patch: |-
-    apiVersion: apps/v1
-    kind: Deployment
-    metadata:
-      name: frontend
-    spec:
-      replicas: 1
-- path: patches/ingress-tags.yaml
+  - patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: frontend
+      spec:
+        replicas: 1
+  - path: patches/ingress-tags.yaml
 
 images:
-- name: team1-dev-ai-worker
-  newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-ai-worker
-  newTag: 40deb60dba3f51cd55ce9c32da0214824c6b09f2
-- name: team1-dev-api-server
-  newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-api-server
-  newTag: 40deb60dba3f51cd55ce9c32da0214824c6b09f2
-- name: team1-dev-frontend
-  newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-frontend
-  newTag: 40deb60dba3f51cd55ce9c32da0214824c6b09f2
+  - name: team1-dev-ai-worker
+    newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-ai-worker
+    newTag: 8ab0fae48659d5555352e48b313a406a629be609
+  - name: team1-dev-api-server
+    newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-api-server
+    newTag: 8ab0fae48659d5555352e48b313a406a629be609
+  - name: team1-dev-frontend
+    newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-dev-frontend
+    newTag: 8ab0fae48659d5555352e48b313a406a629be609
 
 configurations:
-- configurations/secret-name-reference.yaml
+  - configurations/secret-name-reference.yaml
