@@ -1,0 +1,24 @@
+# overlays/prod/prometheus-rules-prod.yaml — DESIGN D55, prod 한정 경보.
+# base 공통룰(ModerationLatencyHigh·WorkerDown)은 ../../base로 상속하므로 여기선 제외(중복 신설 금지).
+# 큐 백로그(ModerationQueueBacklog)는 dev overlay(prometheus-rules-dev.yaml)에만 있었으나,
+# prod도 redis_exporter가 설치돼(envs/prod/platform-addons/addons.tf) redis_key_size{key="mod:queue"}가
+# 노출됨 → prod가 유일 관측 경로(prod는 CloudWatch 미배선)인 부하테스트를 위해 prod overlay에 배선.
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: chatguard-moderation-rules-prod
+  namespace: chatguard
+  labels:
+    release: kube-prometheus-stack   # prod helm release 이름과 일치(prod platform-addons main.tf:95) → ruleSelector 픽업(B-5)
+spec:
+  groups:
+    - name: chatguard-moderation-prod
+      rules:
+        - alert: ModerationQueueBacklog
+          expr: redis_key_size{key="mod:queue"} > 50
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "검열 큐 적체 > 50 (스케일아웃해도 못 따라가는 신호)"
+            description: "mod:queue 깊이 50 초과 지속. 임계 N은 부하테스트 후 보정 예정(DESIGN D5·D10)."
