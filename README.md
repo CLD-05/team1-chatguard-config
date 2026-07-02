@@ -10,9 +10,11 @@
 
 ### app 및 infra 저장소와의 관계
 
-- **`team1-chatguard-app`**: Spring Boot 채팅 서버, Python AI 모더레이션 워커, React 프론트엔드 등 애플리케이션 소스 코드와 컨테이너 이미지 빌드를 관리합니다.
-- **`team1-chatguard-config`**: 빌드된 컨테이너 이미지를 기반으로 환경별 쿠버네티스 매니페스트와 오토스케일링, Ingress, Secret 참조 등 배포 구성을 관리합니다. *(본 저장소)*
-- **`team1-chatguard-infra`**: Terraform을 이용하여 VPC, EKS, RDS, ElastiCache Redis, IAM 등 서비스 실행에 필요한 AWS 인프라 리소스를 코드(IaC)로 관리합니다.
+| 저장소 | 역할 |
+|--------|------|
+| team1-chatguard-app | Spring Boot 채팅 서버, Python AI 모더레이션 워커, React 프론트엔드 등 애플리케이션 소스 코드를 관리합니다. |
+| team1-chatguard-config | Kubernetes 매니페스트와 GitOps 배포 구성을 관리합니다. *(본 저장소)* |
+| team1-chatguard-infra | Terraform을 이용하여 AWS 인프라(VPC, EKS, RDS, ElastiCache, IAM 등)를 코드(IaC)로 관리합니다. |
 
 ### GitOps(Kustomize + ArgoCD)를 사용하는 이유
 
@@ -132,13 +134,3 @@ GitHub Actions
 3. GitHub Actions가 `team1-chatguard-config` 저장소의 `kustomization.yaml` 이미지 태그를 최신 버전으로 갱신합니다.
 4. ArgoCD가 Config 저장소의 변경 사항을 감지합니다.
 5. ArgoCD가 Amazon EKS 클러스터와 상태를 동기화하여 새로운 버전을 롤링 업데이트합니다.
-
----
-
-## 관련 레포지토리
-
-| 레포지토리 | 설명 |
-|---|---|
-| **team1-chatguard-app** | Spring Boot 채팅 서버, Python AI 모더레이션 워커, React 프론트엔드 등 애플리케이션 소스 코드를 관리합니다. |
-| **team1-chatguard-config** | Kubernetes 매니페스트와 ArgoCD를 이용한 GitOps 배포 구성을 관리합니다. *(본 저장소)* |
-| **team1-chatguard-infra** | Terraform을 이용하여 AWS 인프라(VPC, EKS, RDS, ElastiCache, IAM 등)를 코드(IaC)로 관리합니다. |
