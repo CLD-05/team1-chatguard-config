@@ -12,7 +12,7 @@
       }
     ]
   },
-  "description": "chatguard scale-out 데모 (실험 B: worker / 실험 A: chat-server). 큐 깊이 메트릭(redis_exporter checkKeys)은 미설정이라 queue_wait p95로 대체.",
+  "description": "chatguard scale-out 데모 (실험 B: worker / 실험 A: chat-server). 큐 깊이는 redis_exporter check-keys의 redis_key_size{key=\"mod:queue\"} 실측.",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
@@ -29,10 +29,52 @@
       "panels": []
     },
     {
+      "title": "큐 깊이 mod:queue (LLEN · 스케일 ② 신호)",
+      "description": "redis_exporter check-keys가 노출하는 mod:queue 실제 길이 — KEDA 스케일 트리거와 같은 원천. check-keys SCAN 방식이라 큐가 비면 no data로 표시됨(0 아님) — 정상.",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 1 },
+      "id": 8,
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "stepAfter",
+            "fillOpacity": 20,
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "auto",
+            "spanNulls": false
+          },
+          "unit": "none",
+          "min": 0,
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "expr": "redis_key_size{key=\"mod:queue\"}",
+          "legendFormat": "mod:queue depth",
+          "refId": "A"
+        }
+      ]
+    },
+    {
       "title": "Worker 레플리카 수 (오토스케일 주인공)",
       "description": "큐가 쌓이면 KEDA가 worker를 1→N으로 늘리고, 처리 후 다시 줄인다. 이 패널이 'scale-out/in'의 직접 증거.",
       "type": "timeseries",
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 1 },
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 1 },
       "id": 1,
       "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
       "fieldConfig": {
@@ -64,13 +106,13 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "kube_deployment_status_replicas{namespace=\"chatguard\", deployment=\"team1-dev-moderation-worker\"}",
+          "expr": "kube_deployment_status_replicas{namespace=\"chatguard\", deployment=~\"team1-.*-moderation-worker\"}",
           "legendFormat": "desired replicas",
           "refId": "A"
         },
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "kube_deployment_status_replicas_available{namespace=\"chatguard\", deployment=\"team1-dev-moderation-worker\"}",
+          "expr": "kube_deployment_status_replicas_available{namespace=\"chatguard\", deployment=~\"team1-.*-moderation-worker\"}",
           "legendFormat": "available replicas",
           "refId": "B"
         }
@@ -80,7 +122,7 @@
       "title": "검열 반영 지연 p95 (핵심 SLI · 목표 < 5s)",
       "description": "큐 적재 → moderation.hide 발행까지. 부하로 큐가 쌓이면 이 지연이 오르고, worker가 늘면 다시 회복된다. SLO 출발값 5s.",
       "type": "timeseries",
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 1 },
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 1 },
       "id": 2,
       "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
       "fieldConfig": {
@@ -122,8 +164,8 @@
       ]
     },
     {
-      "title": "큐 대기 p95 (큐 적체 proxy — 깊이 메트릭 대용)",
-      "description": "redis_exporter checkKeys 미설정으로 큐 깊이(LLEN) 메트릭이 없어, 큐 대기시간(적재→픽업)으로 적체를 간접 표현. 실제 깊이는 kubectl LLEN(창 C)으로 확인.",
+      "title": "큐 대기 p95 (적재→픽업)",
+      "description": "job이 큐에 적재된 뒤 worker가 픽업하기까지의 대기시간 — 큐 깊이 패널의 시간 축 보조 지표.",
       "type": "timeseries",
       "gridPos": { "h": 8, "w": 12, "x": 0, "y": 9 },
       "id": 3,
@@ -292,7 +334,7 @@
         },
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "kube_deployment_status_replicas{namespace=\"chatguard\", deployment=\"team1-dev-chat-server\"}",
+          "expr": "kube_deployment_status_replicas{namespace=\"chatguard\", deployment=~\"team1-.*-chat-server\"}",
           "legendFormat": "chat-server replicas",
           "refId": "B"
         }
