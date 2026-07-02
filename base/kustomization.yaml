@@ -10,10 +10,10 @@ resources:
   - frontend.yaml
   - ingress.yaml
   - pdb.yaml
-  - hpa.yaml
   - podmonitor.yaml
   - worker-podmonitor.yaml
   - scaledobject.yaml
+  - chat-server-scaledobject.yaml
   - prometheus-rules.yaml
 
 # 공통 라벨 — 모든 리소스에 부착(운영 식별).
