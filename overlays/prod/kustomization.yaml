@@ -34,13 +34,14 @@ patches:
         name: frontend
       spec:
         replicas: 2
+  # 구 chat-server HPA minReplicas:3 승계 — KEDA 일원화로 ScaledObject floor 패치로 교체.
   - patch: |-
-      apiVersion: autoscaling/v2
-      kind: HorizontalPodAutoscaler
+      apiVersion: keda.sh/v1alpha1
+      kind: ScaledObject
       metadata:
-        name: chat-server-hpa
+        name: chat-server
       spec:
-        minReplicas: 3
+        minReplicaCount: 3
   - path: patches/ingress-tags.yaml
   # fix#2: api-server-sa role-arn prod 정정.
   # namePrefix(team1-prod-)는 SA *이름*만 리라이트하고 annotation *값*은 안 건드림 →

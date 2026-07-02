@@ -26,3 +26,9 @@ spec:
         name: team1-prod-moderation-worker
         jsonPointers:
         - /spec/replicas
+      # chat-server는 KEDA(가 만드는 HPA)가 replicas를 관리 → selfHeal이 되돌리지 않도록 무시(dev-app과 대칭).
+      - group: apps
+        kind: Deployment
+        name: team1-prod-chat-server
+        jsonPointers:
+        - /spec/replicas

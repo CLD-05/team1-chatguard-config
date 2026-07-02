@@ -1,0 +1,36 @@
+# base/chat-server-scaledobject.yaml
+# chat-server를 WebSocket 동접(ws_active_connections)으로 스케일.
+# 구 커스텀 HPA(base/hpa.yaml, prometheus-adapter 경유)를 KEDA prometheus 트리거로
+# 일원화 — worker(scaledobject.yaml)와 스케일 스택 통일, adapter는 후속 infra PR로 제거.
+# 산식 동치: sum(ws_active_connections) ÷ threshold(100) = ceil(합/100)
+#  → 구 HPA Pods/AverageValue("100")와 동일한 목표 레플리카.
+# Prometheus 다운 시: 질의 실패 → 스케일 판단 보류(현 레플리카 유지) —
+# adapter 경유 HPA의 <unknown> 실패모드와 동등. fallback 미사용(의도).
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: chat-server
+spec:
+  scaleTargetRef:
+    name: chat-server              # ← nameReference가 team1-dev-... 로 리라이트
+  minReplicaCount: 1               # dev 바닥. prod는 overlay가 3으로 패치(구 HPA minReplicas 승계)
+  maxReplicaCount: 5               # 부하테스트 캡: RDS db.t4g.micro max_connections≈85 회피 (5×Hikari10=50). 운영 재확정 시 상향.
+  triggers:
+    - type: prometheus
+      metadata:
+        # KEDA(keda ns)에서 cross-namespace 접근 → FQDN. 인클러스터 무인증이라 TriggerAuthentication 불요.
+        serverAddress: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
+        # 게이지는 chat-server만 노출 + 스크레이프 라벨에 app 미부착 → namespace만으로 유일 선택.
+        query: sum(ws_active_connections{namespace="chatguard"})
+        threshold: "100"           # 파드당 목표 동접 100 (구 HPA averageValue 승계)
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:                    # 구 base/hpa.yaml behavior 그대로 승계(D16 동치)
+        scaleUp:
+          stabilizationWindowSeconds: 0     # 확장 빠름
+        scaleDown:
+          stabilizationWindowSeconds: 600   # 축소 느림(WS 재연결 폭주 방지)
+          policies:
+            - type: Pods
+              value: 1
+              periodSeconds: 120
