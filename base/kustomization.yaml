@@ -10,6 +10,7 @@ resources:
   - frontend.yaml
   - ingress.yaml
   - pdb.yaml
+  - worker-pdb.yaml
   - podmonitor.yaml
   - worker-podmonitor.yaml
   - scaledobject.yaml
