@@ -18,6 +18,20 @@ spec:
       labels:
         app: moderation-worker
     spec:
+      # HA(D54/FIS): 파드를 AZ·노드에 고르게 분산. ScheduleAnyway(소프트)라 노드 부족 시 스케줄 실패는 안 냄.
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: moderation-worker
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: moderation-worker
       securityContext:
         runAsNonRoot: true # Dockerfile USER app(D31)과 정합
         runAsUser: 999 # ← 추가

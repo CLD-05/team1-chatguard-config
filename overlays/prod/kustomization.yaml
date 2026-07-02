@@ -18,6 +18,15 @@ patches:
         name: moderation-worker
       spec:
         replicas: 2
+  # D13: prod worker floor=2. base ScaledObject는 dev용 minReplicaCount:1이라, prod에서만
+  # 2로 올려 KEDA 실효 floor를 D13에 맞춘다(Deployment replicas:2는 KEDA 인계 전 초기값일 뿐).
+  - patch: |-
+      apiVersion: keda.sh/v1alpha1
+      kind: ScaledObject
+      metadata:
+        name: moderation-worker
+      spec:
+        minReplicaCount: 2
   - patch: |-
       apiVersion: apps/v1
       kind: Deployment
