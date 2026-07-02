@@ -106,26 +106,23 @@ team1-chatguard-config/
 
 애플리케이션 변경 사항은 GitHub Actions와 ArgoCD를 이용한 GitOps 방식으로 Amazon EKS에 자동 배포됩니다.
 
-```mermaid
-flowchart LR
-
-Developer[개발자]
-    -->|Push / Merge| AppRepo[team1-chatguard-app]
-
-AppRepo
-    -->|CI/CD| Actions[GitHub Actions]
-
-Actions
-    -->|Docker 이미지 빌드 및 Push| ECR[Amazon ECR]
-
-Actions
-    -->|이미지 태그 갱신| ConfigRepo[team1-chatguard-config]
-
-ConfigRepo
-    -->|변경 사항 감지| ArgoCD[ArgoCD]
-
-ArgoCD
-    -->|배포 및 동기화| EKS[Amazon EKS]
+```text
+Developer
+    │
+    ▼
+team1-chatguard-app
+    │
+    ▼
+GitHub Actions
+    ├──────────────► Amazon ECR
+    │
+    └──────────────► team1-chatguard-config
+                           │
+                           ▼
+                        ArgoCD
+                           │
+                           ▼
+                       Amazon EKS
 ```
 
 ### 배포 과정
