@@ -13,6 +13,7 @@ spec:
   failedJobsHistoryLimit: 3
   jobTemplate:
     spec:
+      activeDeadlineSeconds: 55
       backoffLimit: 0
       template:
         metadata:
@@ -40,6 +41,8 @@ spec:
                   value: "mod:queue:dlq"
                 - name: DLQ_REPLAY_LIMIT
                   value: "20"
+                - name: DLQ_REPLAY_SCAN_LIMIT
+                  value: "100"
                 - name: DLQ_REPLAY_APPLY
                   value: "true"
                 - name: DLQ_REPLAY_ALLOWED_ERRORS
