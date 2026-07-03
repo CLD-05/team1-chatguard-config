@@ -32,6 +32,7 @@ patches:
       name: moderation-worker
     spec:
       minReplicaCount: 2
+      maxReplicaCount: 10   # E2 실측(7/03): 파드당 ~5.4msg/s → 10대 ≈54/s > 유입 49/s. base 캡 5의 DB 천장 계산은 chat max5 동시 도달 시에만 초과(worker50+chat50=100>85) — E3 프로파일은 chat 3파드(합 80<85)
 - patch: |-
     apiVersion: apps/v1
     kind: Deployment
