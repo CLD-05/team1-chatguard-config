@@ -7,6 +7,7 @@ resources:
   - configmap.yaml
   - chat-server.yaml
   - worker.yaml
+  - moderation-dlq-replay-cronjob.yaml
   - frontend.yaml
   - ingress.yaml
   - pdb.yaml
@@ -27,6 +28,7 @@ labels:
 # namePrefix(team1-dev-)가 이 필드까지 리라이트하게 함(없으면 KEDA가 대상 못 찾음).
 configurations:
   - configurations/scaledobject-name-reference.yaml
+  - configurations/cronjob-name-reference.yaml
 
 # Grafana 대시보드(고아 JSON)를 ConfigMap으로 배선 — DESIGN D55.
 # 사이드카 디스커버리 라벨 grafana_dashboard:"1", disableNameSuffixHash로 이름 고정.

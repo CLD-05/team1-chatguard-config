@@ -1,0 +1,56 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: moderation-dlq-replay
+  labels:
+    app: moderation-dlq-replay
+    app.kubernetes.io/name: chatguard
+    app.kubernetes.io/component: moderation-dlq-replay
+spec:
+  schedule: "*/1 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        metadata:
+          labels:
+            app: moderation-dlq-replay
+            app.kubernetes.io/name: chatguard
+            app.kubernetes.io/component: moderation-dlq-replay
+        spec:
+          restartPolicy: Never
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 999
+            runAsGroup: 999
+          containers:
+            - name: dlq-replay
+              image: team1-dev-ai-worker
+              command: ["python", "dlq_replay.py"]
+              envFrom:
+                - configMapRef:
+                    name: chatguard-config
+                - secretRef:
+                    name: chatguard-secrets
+              env:
+                - name: DLQ_QUEUE_KEY
+                  value: "mod:queue:dlq"
+                - name: DLQ_REPLAY_LIMIT
+                  value: "20"
+                - name: DLQ_REPLAY_APPLY
+                  value: "true"
+                - name: DLQ_REPLAY_ALLOWED_ERRORS
+                  value: "MySQLError,RedisError,TimeoutError,Connection"
+                - name: DLQ_REPLAY_BLOCKED_ERRORS
+                  value: "message_id is required,room_id is required,message not found,JSONDecodeError,Expecting value"
+                - name: DLQ_REPLAY_MAX_REPLAY_COUNT
+                  value: "3"
+              resources:
+                requests:
+                  cpu: "50m"
+                  memory: "128Mi"
+                limits:
+                  memory: "256Mi"

@@ -1,0 +1,11 @@
+nameReference:
+  - kind: ConfigMap
+    version: v1
+    fieldSpecs:
+      - path: spec/jobTemplate/spec/template/spec/containers/envFrom/configMapRef/name
+        kind: CronJob
+  - kind: Secret
+    version: v1
+    fieldSpecs:
+      - path: spec/jobTemplate/spec/template/spec/containers/envFrom/secretRef/name
+        kind: CronJob
