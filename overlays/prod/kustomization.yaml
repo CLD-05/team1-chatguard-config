@@ -61,13 +61,13 @@ patches:
 images:
 - name: team1-dev-ai-worker
   newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-prod-ai-worker
-  newTag: 8168a2cf578d42985807c8eeb214a0fa0dd97685
+  newTag: 7529909784177712d6eebad2e205b50cd50b0daf
 - name: team1-dev-api-server
   newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-prod-api-server
-  newTag: 8168a2cf578d42985807c8eeb214a0fa0dd97685
+  newTag: 7529909784177712d6eebad2e205b50cd50b0daf
 - name: team1-dev-frontend
   newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team1-prod-frontend
-  newTag: 8168a2cf578d42985807c8eeb214a0fa0dd97685
+  newTag: 7529909784177712d6eebad2e205b50cd50b0daf
 
 # 운영계 실물 인프라(RDS, Redis) 주소를 주입하는 블록
       # fix#1: base는 dev 버킷(team1-dev-chatguard-migration) 하드코딩 → configmap 값은
