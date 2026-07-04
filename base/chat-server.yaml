@@ -56,15 +56,23 @@ spec:
                 name: chatguard-config
             - secretRef:
                 name: chatguard-secrets # DB_USER·DB_PASSWORD·JWT_SECRET (공급자: 수동→ESO)
+          env:
+            # /actuator/health/liveness 그룹 명시 활성화 — k8s 자동감지 암묵 의존 제거(프로브 계약 고정)
+            - name: MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED
+              value: "true"
+          # 프로브 분리: liveness/startup=프로세스 생존만(/health/liveness) — 의존성(redis·DB) 장애가
+          # 파드 kill·신규 파드 startup 연쇄 kill로 번지지 않게. readiness만 의존성 집계로 트래픽 차단.
           startupProbe:
-            httpGet: { path: /actuator/health, port: 8080 }
+            httpGet: { path: /actuator/health/liveness, port: 8080 }
             failureThreshold: 30
             periodSeconds: 5 # 최대 150s까지 기동 대기(WS 앱·DB 연결)
           livenessProbe:
-            httpGet: { path: /actuator/health, port: 8080 }
+            httpGet: { path: /actuator/health/liveness, port: 8080 }
+            timeoutSeconds: 3 # 1(기본)→3: GC 등 순간 지연 내성
             periodSeconds: 10
           readinessProbe:
             httpGet: { path: /actuator/health, port: 8080 }
+            timeoutSeconds: 5 # 1(기본)→5: redis 타임아웃 3s+여유
             periodSeconds: 10
           resources:
             requests: { cpu: "250m", memory: "512Mi" }
